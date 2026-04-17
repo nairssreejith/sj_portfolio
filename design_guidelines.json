@@ -1,0 +1,81 @@
+{
+  "theme": "Light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "design_philosophy": "Objective, rigid, and function-first. High contrast with generous negative space. No unnecessary decorations, relying on tight typography and strict grid layouts. Embracing the 'Grid Borders' technical look.",
+  "colors": {
+    "background_primary": "#FAFAFA",
+    "background_secondary": "#FFFFFF",
+    "text_primary": "#0A0A0A",
+    "text_secondary": "#525252",
+    "accent": "#FF3300",
+    "border": "#E5E5E5",
+    "border_dark": "#0A0A0A"
+  },
+  "typography": {
+    "font_heading": "'Outfit', sans-serif",
+    "font_body": "'IBM Plex Sans', sans-serif",
+    "font_mono": "'JetBrains Mono', monospace",
+    "rules": {
+      "h1": "text-5xl md:text-6xl font-light tracking-tighter text-primary",
+      "h2": "text-3xl md:text-4xl font-medium tracking-tight text-primary",
+      "h3": "text-xl md:text-2xl font-medium text-primary",
+      "body": "text-base md:text-lg leading-relaxed text-secondary",
+      "labels": "text-xs uppercase tracking-[0.2em] font-mono text-secondary"
+    }
+  },
+  "layout_and_spacing": {
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "section_padding": "py-24 md:py-32",
+    "grid_strategy": "The 'Grid Borders' (Technical Look). Expose the skeleton for sections like Skills and Projects. Heavy use of generous padding (p-8 to p-12) in containers. Asymmetry creates tension."
+  },
+  "components": {
+    "navigation": "Sticky top, backdrop-blur-md, 1px bottom border border-border, flex justify-between items-center py-4 bg-background_primary/80",
+    "hero": "Full height min-h-[80vh] flex flex-col justify-center. Massive typography left-aligned. Include profile image as a stark rectangular block (no rounded corners).",
+    "buttons": "Flat solid background #0A0A0A text white, or transparent with 1px border. Hover state inverts or adds accent color. rounded-none.",
+    "project_card": "Minimalist. Image fills the top, tight padding below for title and mono tags. rounded-none to maintain Swiss rigor. 1px solid border.",
+    "skills_grid": "Grid layout (grid-cols-2 md:grid-cols-4), 1px borders dividing items (border-collapse style). p-8 in each grid cell.",
+    "contact_section": "Massive text link for email (max text-6xl). Left aligned or centered. Strict grid lines."
+  },
+  "motion": {
+    "global": "Use native CSS transitions only. No external animation libraries. transition-all duration-300 ease-out.",
+    "hover": "Image zoom on hover (scale-105) inside overflow-hidden container. Button background inversion."
+  },
+  "media": {
+    "profile_image": {
+      "url": "https://images.unsplash.com/photo-1620122303020-87ec826cf70d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxibGFjayUyMGFuZCUyMHdoaXRlJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc2NDU4NDkzfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Black and white minimal portrait",
+      "category": "hero_profile"
+    },
+    "project_images": [
+      {
+        "url": "https://images.unsplash.com/photo-1549791084-5f78368b208b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Project 1 minimal architecture",
+        "category": "project_thumbnail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1602128110234-2d11c0aaadfe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Project 2 green tree minimal",
+        "category": "project_thumbnail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1483366774565-c783b9f70e2c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Project 3 concrete building",
+        "category": "project_thumbnail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1534094830444-3a1e21f7e3e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Project 4 white painted wall",
+        "category": "project_thumbnail"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Inject Google Fonts in index.html: Outfit (300, 400, 500), IBM Plex Sans (400, 500), JetBrains Mono (400).",
+    "Do NOT use any external animation libraries. Use CSS transition-all duration-300 ease-in-out for hover effects.",
+    "Ensure the hero heading does not exceed text-6xl and uses a very tight letter spacing (tracking-tighter).",
+    "Keep borders sharp. Use rounded-none for all cards, buttons, and images to enforce the Swiss design aesthetic.",
+    "Use data-testid on all interactive elements (buttons, links, form inputs).",
+    "Build standard React functional components. No Shadcn needed since this is a highly custom marketing/portfolio layout. Use plain HTML/Tailwind.",
+    "Implement smooth scrolling using CSS scroll-behavior: smooth."
+  ]
+}
