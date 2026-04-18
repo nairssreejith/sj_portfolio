@@ -1,65 +1,59 @@
-# Portfolio Website — PRD
+# PRD — SJ Portfolio (nairssreejith)
 
-## Overview
-A modern, minimal, professional single-page portfolio website built with Vite + React + Tailwind CSS.
+## Original Problem Statement
+Fetch portfolio code from https://github.com/nairssreejith/sj_portfolio/tree/dev and refactor the portfolio layout to introduce a background animation layer. The background is intended for a future day-to-night sky gradient scroll transition.
 
 ## Architecture
-- **Frontend**: Vite 5 + React 18 + Tailwind CSS 3
-- **Backend**: FastAPI (minimal, health endpoint only)
-- **Styling**: Tailwind CSS with Swiss Brutalist design system
-- **Icons**: lucide-react
-- **Fonts**: Outfit (headings), IBM Plex Sans (body), JetBrains Mono (mono)
+- **Framework**: React + Vite + Tailwind CSS + Framer Motion v12
+- **Design System**: Swiss / High-Contrast — flat colors, JetBrains Mono, Outfit, IBM Plex Sans
+- **Backend**: FastAPI + MongoDB (not used by frontend currently)
 
-## Folder Structure
+## Layer Structure (Key Refactor — Completed)
 ```
-/app/
-├── frontend/
-│   ├── index.html                  # Entry with Google Fonts
-│   ├── vite.config.js             # Vite config (port 3000, allowedHosts)
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
-│   ├── src/
-│   │   ├── main.jsx               # React entry point
-│   │   ├── App.jsx                # Root component
-│   │   ├── index.css              # Global styles + Tailwind
-│   │   └── components/
-│   │       ├── Navbar.jsx         # Sticky nav + mobile hamburger
-│   │       ├── Hero.jsx           # Hero section (name, bio, portrait, CTAs)
-│   │       ├── About.jsx          # Bio + 4-stat grid + resume button
-│   │       ├── Skills.jsx         # 6-category skills grid
-│   │       ├── Projects.jsx       # 4 project cards with links
-│   │       ├── Contact.jsx        # Contact form + info + social links
-│   │       └── Footer.jsx         # Copyright footer
-└── backend/
-    ├── server.py                  # FastAPI minimal (health check)
-    └── requirements.txt
+#page-root (position: relative)
+├── BackgroundLayer (position: fixed, inset-0, z-0, pointer-events-none)
+│   └── [sky gradient slots — empty until animation phase]
+└── #content-layer (position: relative, z-10, scrolls normally)
+    ├── Navbar (sticky top-0 z-50)
+    ├── Hero (#hero, bg-bg-primary #FAFAFA)
+    ├── About (#about, bg-bg-secondary #FFFFFF)
+    ├── Skills (#skills, bg-bg-primary #FAFAFA)
+    ├── Projects (#projects, bg-bg-secondary #FFFFFF)
+    ├── Contact (#contact, bg-bg-primary #FAFAFA)
+    └── Footer (bg-primary #0A0A0A)
+```
 
-## Design System
-- Theme: Light (#FAFAFA background)
-- Accent: #FF3300 (red-orange)
-- Primary text: #0A0A0A
-- Secondary text: #525252
-- Style: Swiss Brutalist — sharp corners, grid borders, high contrast
+## Color Tokens
+| Token         | Value    |
+|---------------|----------|
+| primary       | #0A0A0A  |
+| secondary     | #525252  |
+| accent        | #FF3300  |
+| border        | #E5E5E5  |
+| bg-primary    | #FAFAFA  |
+| bg-secondary  | #FFFFFF  |
 
-## Implemented Features (Feb 2026)
-- [x] Hero section — name, title badge, bio, portrait image, 2 CTAs
-- [x] About section — bio paragraphs, 4 stats (Years, Projects, Clients, Uptime), Resume button
-- [x] Skills section — 6 grid categories (Frontend, Backend, Database, DevOps, Tools, Soft Skills)
-- [x] Projects section — 4 placeholder project cards (image, title, tags, Live Demo + Source Code links)
-- [x] Contact section — form with name/email/message, success state, email link, location, social links, availability
-- [x] Navbar — sticky, blur effect, desktop nav links + mobile hamburger menu
-- [x] Footer — copyright
-- [x] Responsive layout (mobile + desktop)
-- [x] Semantic HTML throughout
-- [x] data-testid on all interactive elements
-- [x] Git initialized on `dev` branch
-- [x] No animations / no external animation libraries (CSS transitions only)
+## What's Been Implemented
+- [x] 2026-04-18 — Background animation layer structure introduced
+  - `App.jsx` refactored: page-root (relative) > BackgroundLayer (fixed z-0) + content-layer (relative z-10)
+  - `BackgroundLayer.jsx` created: fixed, inset-0, z-0, pointer-events-none, aria-hidden — reserved slot for sky gradient
+  - `useScroll()` from Framer Motion wired up — logs scroll progress (0–100%) to console, ready for animation phase
+  - 100% test pass rate (11/11 Playwright tests)
 
-## Backlog / P1 Features
-- [ ] Connect to GitHub repo remote and push to dev branch (user needs to provide repo URL)
-- [ ] Replace placeholder content with real data
-- [ ] Add dark mode toggle
-- [ ] Add smooth scroll progress indicator
-- [ ] Add micro-animations (once user approves)
-- [ ] Blog section
-- [ ] Testimonials section
+## Backlog / Next Steps
+
+### P0 — Animation Phase (Next)
+- Add sky gradient layers (dawn, day, dusk, night divs) inside BackgroundLayer
+- Pass scrollYProgress MotionValue from App.jsx to BackgroundLayer as prop
+- Make section backgrounds transparent/semi-transparent so sky shows through
+- Wire scroll position to gradient opacity transitions
+
+### P1 — Content Personalisation
+- Replace placeholder name/email/links with real details
+- Add actual profile photo and project data
+
+### P2 — Enhancements
+- Staggered section entrance animations
+- Wire contact form to backend API or email service
+- SEO meta tags (og:image, Twitter card)
+- Resume PDF at /public/resume.pdf
