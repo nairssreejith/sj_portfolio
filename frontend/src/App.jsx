@@ -1,5 +1,5 @@
 /**
- * App.jsx — Portfolio root with background animation layer structure.
+ * App.js — Portfolio root with background animation layer structure.
  *
  * LAYER ARCHITECTURE
  * ───────────────────
@@ -38,6 +38,7 @@
  * to drive the day-to-night sky gradient transition.
  */
 
+import { useRef, useEffect } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -47,17 +48,39 @@ import Projects from './components/Projects'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import BackgroundLayer from './components/BackgroundLayer'
+import '@/App.css'
 
 export default function App() {
-  // Tracks scroll progress across the entire page (0 = top, 1 = bottom).
-  // MotionValue — no re-renders on scroll, pure frame-level updates.
   const { scrollYProgress } = useScroll()
 
-  // Log scroll progress for dev verification.
-  // In the animation phase, this value will be passed to BackgroundLayer
-  // to drive the sky gradient transition.
+  // Refs track dark-mode state without triggering re-renders
+  const isDarkRef = useRef(false)
+  const transitionTimeoutRef = useRef(null)
+
+  // Initialise to light theme and clean up on unmount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'light')
+    return () => {
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current)
+    }
+  }, [])
+
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    console.log(`Scroll Progress: ${Math.round(latest * 100)}%`)
+    // Dark mode activates at ~62% scroll (entering projects section, night sky building).
+    // Only fire when the threshold is actually crossed to avoid redundant DOM writes.
+    const shouldBeDark = latest >= 0.62
+    if (shouldBeDark !== isDarkRef.current) {
+      isDarkRef.current = shouldBeDark
+      document.documentElement.setAttribute(
+        'data-theme',
+        shouldBeDark ? 'dark' : 'light'
+      )
+      // Clear any pending timeout and reset after transition completes
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current)
+      transitionTimeoutRef.current = setTimeout(() => {
+        transitionTimeoutRef.current = null
+      }, 800)
+    }
   })
 
   return (

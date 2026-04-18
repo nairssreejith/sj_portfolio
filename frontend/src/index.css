@@ -17,24 +17,110 @@ body {
   background-color: transparent;
   color: #0A0A0A;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Sky background visibility ────────────────────────────────────────
- *
- * Sections have solid Tailwind bg classes (bg-bg-primary / bg-bg-secondary)
- * that would fully hide the BackgroundLayer gradient beneath them.
- * These ID-based selectors (specificity 100–201) override those utility
- * classes (specificity 10) to make sections semi-transparent, letting
- * the sky show through without affecting text readability.
- *
- * Hero is more transparent (sky is the hero visual).
- * All other sections use a lighter frosted-glass overlay so the
- * changing sky remains visible as the user scrolls through the content.
- * ─────────────────────────────────────────────────────────────────── */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   THEME SYSTEM — CSS variables drive section and navbar backgrounds.
+   JavaScript (App.js) sets data-theme="light" | "dark" on <html>
+   based on scroll progress (~62%). All colour changes are transitioned.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+:root,
+[data-theme="light"] {
+  --hero-bg:    rgba(250, 250, 250, 0.52);
+  --section-bg: rgba(250, 250, 250, 0.74);
+  --nav-bg:     rgba(250, 250, 250, 0.82);
+}
+
+[data-theme="dark"] {
+  --hero-bg:    rgba(4,  6,  18, 0.46);
+  --section-bg: rgba(4,  6,  18, 0.64);
+  --nav-bg:     rgba(4,  6,  18, 0.90);
+}
+
+/* ── Section + Navbar background (driven by CSS variables) ─────────── */
 #hero {
-  background-color: rgba(250, 250, 250, 0.60);
+  background-color: var(--hero-bg);
+  transition: background-color 0.70s ease;
 }
 
 #content-layer section:not(#hero) {
-  background-color: rgba(250, 250, 250, 0.78);
+  background-color: var(--section-bg);
+  transition: background-color 0.70s ease;
+}
+
+#content-layer header {
+  background-color: var(--nav-bg);
+  transition: background-color 0.70s ease, border-color 0.70s ease;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SMOOTH THEME TRANSITIONS — applied directly to the property classes
+   that change during the light→dark switch.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Text colour — headings, body copy */
+.text-primary  { transition: color 0.65s ease; }
+.text-secondary { transition: color 0.65s ease; }
+
+/* Card / input backgrounds */
+.bg-bg-primary,
+.bg-bg-secondary,
+.bg-white {
+  transition: background-color 0.65s ease;
+}
+
+/* Dividers, tag borders, stat grid lines */
+.border-border,
+.border-primary {
+  transition: border-color 0.65s ease;
+}
+
+/* Project grid gap-filler */
+.bg-border { transition: background-color 0.65s ease; }
+
+/* Form inputs (not captured by the class rules above) */
+input, textarea { transition: color 0.65s ease, background-color 0.65s ease, border-color 0.65s ease; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DARK MODE OVERRIDES  [data-theme="dark"]
+   Specificity (1,1,0) = 110 beats Tailwind utility (0,1,0) = 10.
+   No !important needed.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── Text ─────────────────────────────────────────────────────────── */
+[data-theme="dark"] .text-primary   { color: #E8E8E8; }
+[data-theme="dark"] .text-secondary { color: #9A9A9A; }
+
+/* ── Borders ──────────────────────────────────────────────────────── */
+[data-theme="dark"] .border-border  { border-color: rgba(255, 255, 255, 0.10); }
+[data-theme="dark"] .border-primary { border-color: rgba(232, 232, 232, 0.42); }
+
+/* ── Card / input backgrounds ─────────────────────────────────────── */
+[data-theme="dark"] .bg-bg-primary  { background-color: rgba(8,  12, 30,  0.78); }
+[data-theme="dark"] .bg-bg-secondary{ background-color: rgba(12, 18, 38,  0.80); }
+[data-theme="dark"] .bg-white       { background-color: rgba(8,  12, 30,  0.78); }
+[data-theme="dark"] .bg-border      { background-color: rgba(255, 255, 255, 0.06); }
+
+/* ── Form inputs ──────────────────────────────────────────────────── */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea    { color: #E8E8E8; }
+[data-theme="dark"] ::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DEBUG WRAPPER UTILITY (Emergent platform)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@layer base {
+  [data-debug-wrapper="true"] { display: contents !important; }
+  [data-debug-wrapper="true"] > * {
+    margin-left: inherit; margin-right: inherit; margin-top: inherit; margin-bottom: inherit;
+    padding-left: inherit; padding-right: inherit; padding-top: inherit; padding-bottom: inherit;
+    column-gap: inherit; row-gap: inherit; gap: inherit;
+    border-left-width: inherit; border-right-width: inherit;
+    border-top-width: inherit; border-bottom-width: inherit;
+    border-left-style: inherit; border-right-style: inherit;
+    border-top-style: inherit; border-bottom-style: inherit;
+    border-left-color: inherit; border-right-color: inherit;
+    border-top-color: inherit; border-bottom-color: inherit;
+  }
 }

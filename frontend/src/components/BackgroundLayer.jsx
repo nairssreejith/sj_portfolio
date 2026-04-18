@@ -1,66 +1,67 @@
 /**
  * BackgroundLayer.jsx — Sky image cross-fade + sun element.
  *
- * THREE-LAYER IMAGE SYSTEM
- * ──────────────────────────
- * Three full-viewport sky photos are stacked (absolute, inset-0).
- * Each has a scroll-driven opacity that fades in/out smoothly:
+ * SCROLL TIMELINE
+ * ───────────────
+ *   0.00        Sunrise — warm golden morning sky (hero)
+ *   0.00–0.35   Bright day, sun arcing upward
+ *   0.35–0.55   Day fading, sunset bleeding in
+ *   0.55–0.70   Sunset deepens, sky darkening
+ *   0.70–1.00   Night sky builds to full black-star darkness (contact)
  *
- *   Layer        Peak scroll   Image
- *   ─────────    ───────────   ───────────────────────────────
- *   Day          0.00 – 0.35   Clear blue sky (subtle, #1)
- *   Sunset       0.40 – 0.60   Golden clouds at dusk (#2)
- *   Night        0.75 – 1.00   Starry deep-blue sky (#3)
- *
- * Overlap zones create imperceptible dissolves between phases.
- * Max opacity is capped at 0.78 so backgrounds stay very subtle
- * and never compete with content readability.
- *
- * SUN ELEMENT
- * ────────────
- * The Sun component arcs from left (dawn) through the top-center (noon)
- * to the right (sunset), then fades off-screen during the night phase.
- * It receives scrollYProgress as a prop (same MotionValue, zero overhead).
- *
- * LAYERING CONTRACT (unchanged)
- * ──────────────────────────────
- *   z-0  — BackgroundLayer outer container (fixed to viewport)
- *   z-1  — sky image layers        (within BackgroundLayer)
- *   z-2  — Sun element             (within BackgroundLayer, above images)
- *   z-10 — Content layer           (scrolls normally on top)
- *   z-50 — Navbar                  (sticky, within content layer)
+ * LAYER STACK (within BackgroundLayer)
+ * ──────────────────────────────────────
+ *   z auto  — sunrise sky image  (bottom, always visible 0→0.55)
+ *   z auto  — sunset sky image   (mid, 0.25→0.70)
+ *   z auto  — night sky image    (top, 0.50→1.0, very dark)
+ *   z auto  — darkness booster   (pure black overlay, 0.60→1.0)
+ *   z 2     — Sun element        (above all sky layers)
  */
 
 import { useTransform, motion } from 'framer-motion'
 import Sun from './Sun'
 
 // ── Sky image URLs ───────────────────────────────────────────────────
-const DAY_SKY    = 'https://images.unsplash.com/photo-1664702717663-5479b5d383a4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwxfHxjbGVhciUyMGJsdWUlMjBza3klMjBtaW5pbWFsJTIwZGF5dGltZXxlbnwwfHx8fDE3NzY1MDA0NDN8MA&ixlib=rb-4.1.0&q=85'
-const SUNSET_SKY = 'https://images.unsplash.com/photo-1730835438368-3b9115137cf8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxzb2Z0JTIwd2FybSUyMGdvbGRlbiUyMHN1bnNldCUyMHNreSUyMGhvcml6b258ZW58MHx8fHwxNzc2NTAwNDQzfDA&ixlib=rb-4.1.0&q=85'
-const NIGHT_SKY  = 'https://images.unsplash.com/photo-1772511988877-f29dc05295cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwzfHxkYXJrJTIwbmlnaHQlMjBza3klMjBzdGFycyUyMGRlZXAlMjBibHVlfGVufDB8fHx8MTc3NjUwMDQ0M3ww&ixlib=rb-4.1.0&q=85'
+// Sunrise: warm amber/orange sky with sun at the horizon
+const SUNRISE_SKY = 'https://images.unsplash.com/photo-1630007091971-5478f698b157?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHw0fHx3YXJtJTIwZ29sZGVuJTIwc3VucmlzZSUyMHNreSUyMGJyaWdodCUyMG1vcm5pbmclMjBob3Jpem9ufGVufDB8fHx8MTc3NjUwMTQ3NHww&ixlib=rb-4.1.0&q=85'
+// Sunset: golden clouds glowing at dusk
+const SUNSET_SKY  = 'https://images.unsplash.com/photo-1730835438368-3b9115137cf8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxzb2Z0JTIwd2FybSUyMGdvbGRlbiUyMHN1bnNldCUyMHNreSUyMGhvcml6b258ZW58MHx8fHwxNzc2NTAwNDQzfDA&ixlib=rb-4.1.0&q=85'
+// Night: very dark sky dense with stars — dramatically dark
+const NIGHT_SKY   = 'https://images.unsplash.com/photo-1719820390502-e0823fcc739d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxibGFjayUyMHN0YXJyeSUyMG1pbGt5JTIwd2F5JTIwbmlnaHQlMjBza3klMjBkYXJrJTIwZHJhbWF0aWN8ZW58MHx8fHwxNzc2NTAxNDc0fDA&ixlib=rb-4.1.0&q=85'
 
 export default function BackgroundLayer({ scrollYProgress }) {
 
-  // ── Day sky ── visible at scroll 0, fully faded by 0.55, stays 0 ────
-  // Full 0→1 range prevents framer-motion from extrapolating past 0.55
-  const dayOpacity = useTransform(
+  // ── Sunrise / day sky ────────────────────────────────────────────────
+  // Starts bright (0.88), holds through early scroll, fades out by 0.55
+  const sunriseOpacity = useTransform(
     scrollYProgress,
-    [0,    0.30,  0.55,  1.0],
-    [0.75, 0.75,  0,     0]
+    [0,    0.28,  0.50,  1.0],
+    [0.88, 0.88,  0,     0]
   )
 
-  // ── Sunset sky ── peaks at 0.42–0.55, fully gone by 0.78, stays 0 ──
+  // ── Sunset sky ───────────────────────────────────────────────────────
+  // Blends in from 0.22, peaks during skills/projects, gone by 0.72
   const sunsetOpacity = useTransform(
     scrollYProgress,
-    [0.20, 0.42,  0.55,  0.78, 1.0],
-    [0,    0.70,  0.70,  0,    0]
+    [0,    0.22, 0.38,  0.55,  0.72, 1.0],
+    [0,    0,    0.75,  0.75,  0,    0]
   )
 
-  // ── Night sky ── builds from 0.55, fully visible at 1.0 ─────────────
+  // ── Night sky ─────────────────────────────────────────────────────────
+  // Starts appearing at 0.50, reaches full darkness at contact (0.88+)
   const nightOpacity = useTransform(
     scrollYProgress,
-    [0,   0.55,  0.78,  1.0],
-    [0,   0,     0.65,  0.80]
+    [0,   0.50,  0.72,  0.88, 1.0],
+    [0,   0,     0.75,  0.90, 0.92]
+  )
+
+  // ── Pure-black darkness booster ──────────────────────────────────────
+  // Deepens the night beyond the photo's natural darkness, ensuring the
+  // contact section feels truly black-and-stars rather than just dark-blue.
+  const darkBooster = useTransform(
+    scrollYProgress,
+    [0,   0.60,  0.82, 1.0],
+    [0,   0,     0.28, 0.42]
   )
 
   return (
@@ -70,17 +71,17 @@ export default function BackgroundLayer({ scrollYProgress }) {
       aria-hidden="true"
       className="fixed inset-0 z-0 w-screen h-screen pointer-events-none overflow-hidden"
     >
-      {/* ── Day sky image ─────────────────────────────────────────────── */}
+      {/* ── Sunrise / day sky image ─────────────────────────────────── */}
       <motion.div
         data-testid="sky-day"
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${DAY_SKY})`,
-          opacity: dayOpacity,
+          backgroundImage: `url(${SUNRISE_SKY})`,
+          opacity: sunriseOpacity,
         }}
       />
 
-      {/* ── Sunset sky image ──────────────────────────────────────────── */}
+      {/* ── Sunset sky image ────────────────────────────────────────── */}
       <motion.div
         data-testid="sky-sunset"
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -90,7 +91,7 @@ export default function BackgroundLayer({ scrollYProgress }) {
         }}
       />
 
-      {/* ── Night sky image ───────────────────────────────────────────── */}
+      {/* ── Night sky image ─────────────────────────────────────────── */}
       <motion.div
         data-testid="sky-night"
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -100,7 +101,17 @@ export default function BackgroundLayer({ scrollYProgress }) {
         }}
       />
 
-      {/* ── Sun element : arcs across all sky phases ──────────────────── */}
+      {/* ── Darkness booster: pure black overlay fading in at night ─── */}
+      <motion.div
+        data-testid="sky-dark-booster"
+        className="absolute inset-0"
+        style={{
+          backgroundColor: '#000000',
+          opacity: darkBooster,
+        }}
+      />
+
+      {/* ── Sun element: arcs from dawn through noon to sunset ─────── */}
       <Sun scrollYProgress={scrollYProgress} />
     </div>
   )
