@@ -74,7 +74,8 @@ export default function App() {
        * scrolls. Currently empty — sky gradient layers (dawn, day,
        * dusk, night) will be added here in the animation phase.
        */}
-      <BackgroundLayer />
+      {/* scrollYProgress drives the day → sunset → night colour transition */}
+      <BackgroundLayer scrollYProgress={scrollYProgress} />
 
       {/* ── Layer 2: Content ──────────────────────────────────────── */}
       {/*

@@ -14,7 +14,27 @@ html {
 
 body {
   font-family: 'IBM Plex Sans', sans-serif;
-  background-color: #FAFAFA;
+  background-color: transparent;
   color: #0A0A0A;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sky background visibility ────────────────────────────────────────
+ *
+ * Sections have solid Tailwind bg classes (bg-bg-primary / bg-bg-secondary)
+ * that would fully hide the BackgroundLayer gradient beneath them.
+ * These ID-based selectors (specificity 100–201) override those utility
+ * classes (specificity 10) to make sections semi-transparent, letting
+ * the sky show through without affecting text readability.
+ *
+ * Hero is more transparent (sky is the hero visual).
+ * All other sections use a lighter frosted-glass overlay so the
+ * changing sky remains visible as the user scrolls through the content.
+ * ─────────────────────────────────────────────────────────────────── */
+#hero {
+  background-color: rgba(250, 250, 250, 0.60);
+}
+
+#content-layer section:not(#hero) {
+  background-color: rgba(250, 250, 250, 0.78);
 }
