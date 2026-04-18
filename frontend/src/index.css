@@ -54,6 +54,13 @@ body {
   transition: background-color 0.70s ease, border-color 0.70s ease;
 }
 
+/* Dark mode — floating "Available for Hire" tag on portrait needs
+   a contrasting background once the page is in night mode. */
+[data-theme="dark"] [data-testid="hero-portrait-tag"] {
+  background-color: #E8E8E8;
+  color: #0A0A0A;
+}
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SMOOTH THEME TRANSITIONS — applied directly to the property classes
    that change during the light→dark switch.

@@ -8,10 +8,10 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-mono text-xs uppercase tracking-widest text-white/60">
-          &copy; {year} Alex Rivera — All rights reserved.
+          &copy; {year} Sreejith S Nair — Trivandrum, Kerala
         </p>
         <p className="font-mono text-xs uppercase tracking-widest text-white/60">
-          Built with React &amp; Tailwind CSS
+          Built with React, Tailwind &amp; Framer Motion
         </p>
       </div>
     </footer>

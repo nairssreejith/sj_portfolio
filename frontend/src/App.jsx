@@ -110,7 +110,7 @@ export default function App() {
       <div id="content-layer" data-testid="content-layer" className="relative z-10">
         <Navbar />
         <main>
-          <Hero />
+          <Hero scrollYProgress={scrollYProgress} />
           <About />
           <Skills />
           <Projects />

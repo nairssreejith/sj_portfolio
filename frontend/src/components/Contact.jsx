@@ -1,20 +1,17 @@
 import { useState } from 'react'
-import { Mail, MapPin, Github, Linkedin, Twitter } from 'lucide-react'
+import { MapPin, Github, Linkedin, Mail, Phone } from 'lucide-react'
 
 const SOCIAL_LINKS = [
-  { label: 'GitHub', href: 'https://github.com', icon: Github, testId: 'contact-github' },
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin, testId: 'contact-linkedin' },
-  { label: 'Twitter', href: 'https://twitter.com', icon: Twitter, testId: 'contact-twitter' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sreejithsnair', icon: Linkedin, testId: 'contact-linkedin' },
+  { label: 'GitHub',   href: 'https://github.com/nairssreejith',         icon: Github,   testId: 'contact-github'   },
+  { label: 'Email',    href: 'mailto:sreejithsnair.sj@gmail.com',        icon: Mail,     testId: 'contact-mail'     },
 ]
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
   const handleSubmit = (e) => {
     e.preventDefault()
     setSubmitted(true)
@@ -25,10 +22,9 @@ export default function Contact() {
     <section
       id="contact"
       data-testid="contact-section"
-      className="py-24 md:py-32 bg-bg-primary border-b border-border"
+      className="py-24 md:py-32 border-b border-border"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Section label */}
         <p
           data-testid="contact-label"
           className="font-mono text-xs uppercase tracking-[0.2em] text-secondary mb-4"
@@ -37,13 +33,14 @@ export default function Contact() {
         </p>
         <h2
           data-testid="contact-heading"
-          className="font-heading font-medium text-3xl md:text-4xl tracking-tight text-primary mb-4"
+          className="font-heading font-medium text-3xl md:text-5xl tracking-tight text-primary mb-4 leading-[1.05]"
         >
-          Let's Work Together
+          Got a project that needs<br />
+          <span className="text-accent">a senior engineer?</span>
         </h2>
         <p className="font-body text-base md:text-lg leading-relaxed text-secondary mb-14 max-w-xl">
-          Have a project in mind, an opportunity, or just want to say hello? 
-          I'd love to hear from you. Reach out and I'll get back to you shortly.
+          Hiring, collaborating, or just comparing notes on Android / AR / AWS?
+          I reply to every serious message within 1–2 business days.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -72,59 +69,32 @@ export default function Contact() {
               noValidate
             >
               <div>
-                <label
-                  htmlFor="name"
-                  className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2"
-                >
-                  Your Name
-                </label>
+                <label htmlFor="name" className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2">Your Name</label>
                 <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={handleChange}
+                  id="name" name="name" type="text" required
+                  value={form.name} onChange={handleChange}
                   data-testid="contact-input-name"
-                  placeholder="Jane Smith"
+                  placeholder="e.g. Priya Menon"
                   className="w-full border border-border bg-bg-secondary px-4 py-3 font-body text-sm text-primary placeholder-secondary focus:outline-none focus:border-primary transition-colors duration-300"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2"
-                >
-                  Email Address
-                </label>
+                <label htmlFor="email" className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2">Email Address</label>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={handleChange}
+                  id="email" name="email" type="email" required
+                  value={form.email} onChange={handleChange}
                   data-testid="contact-input-email"
-                  placeholder="jane@example.com"
+                  placeholder="you@company.com"
                   className="w-full border border-border bg-bg-secondary px-4 py-3 font-body text-sm text-primary placeholder-secondary focus:outline-none focus:border-primary transition-colors duration-300"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="message"
-                  className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2"
-                >
-                  Message
-                </label>
+                <label htmlFor="message" className="block font-mono text-xs uppercase tracking-widest text-secondary mb-2">Message</label>
                 <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  required
-                  value={form.message}
-                  onChange={handleChange}
+                  id="message" name="message" rows={6} required
+                  value={form.message} onChange={handleChange}
                   data-testid="contact-input-message"
-                  placeholder="Tell me about your project..."
+                  placeholder="Tell me about the team, the stack, and the problem you'd like me to solve..."
                   className="w-full border border-border bg-bg-secondary px-4 py-3 font-body text-sm text-primary placeholder-secondary focus:outline-none focus:border-primary transition-colors duration-300 resize-none"
                 />
               </div>
@@ -133,7 +103,7 @@ export default function Contact() {
                 data-testid="contact-submit-btn"
                 className="self-start px-8 py-3 bg-primary text-white font-mono text-xs uppercase tracking-widest hover:bg-accent transition-colors duration-300"
               >
-                Send Message
+                Send Message →
               </button>
             </form>
           )}
@@ -145,11 +115,19 @@ export default function Contact() {
                 Direct Contact
               </p>
               <a
-                href="mailto:alex@example.com"
+                href="mailto:sreejithsnair.sj@gmail.com"
                 data-testid="contact-email-link"
-                className="font-heading font-light text-3xl md:text-4xl tracking-tight text-primary hover:text-accent transition-colors duration-300 break-all"
+                className="font-heading font-light text-2xl md:text-3xl tracking-tight text-primary hover:text-accent transition-colors duration-300 break-all"
               >
-                alex@example.com
+                sreejithsnair.sj@gmail.com
+              </a>
+              <a
+                href="tel:+918848791837"
+                data-testid="contact-phone-link"
+                className="mt-3 flex items-center gap-2 font-mono text-sm text-secondary hover:text-primary transition-colors duration-300"
+              >
+                <Phone size={14} />
+                +91 884 8791837
               </a>
             </div>
 
@@ -159,7 +137,7 @@ export default function Contact() {
               </p>
               <div className="flex items-center gap-2 text-secondary">
                 <MapPin size={15} />
-                <span className="font-body text-base">San Francisco, CA — Available for Remote</span>
+                <span className="font-body text-base">Trivandrum, Kerala — Open to Remote · Global</span>
               </div>
             </div>
 
@@ -189,8 +167,8 @@ export default function Contact() {
                 Availability
               </p>
               <div className="flex items-center gap-2" data-testid="availability-badge">
-                <span className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="font-body text-sm text-secondary">Open to opportunities</span>
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="font-body text-sm text-secondary">Open to senior / lead engineering roles</span>
               </div>
             </div>
           </div>

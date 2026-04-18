@@ -20,9 +20,10 @@ export default function Navbar() {
         <a
           href="#hero"
           data-testid="nav-logo"
-          className="font-heading font-medium text-primary text-lg tracking-tight"
+          className="font-heading font-medium text-primary text-lg tracking-tight flex items-center gap-2"
         >
-          Alex Rivera
+          <span className="inline-block w-2 h-2 bg-accent" />
+          Sreejith <span className="text-secondary font-light">S Nair</span>
         </a>
 
         {/* Desktop links */}

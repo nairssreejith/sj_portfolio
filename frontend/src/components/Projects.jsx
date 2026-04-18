@@ -3,45 +3,55 @@ import { ExternalLink, Github } from 'lucide-react'
 const PROJECTS = [
   {
     id: 1,
-    title: 'DevFlow — Project Management Tool',
+    featured: true,
+    title: 'XRMeet — AR Video Conferencing',
+    company: 'iBoson Innovations · 2022–2023',
     description:
-      'A real-time collaborative project management app with kanban boards, sprint planning, and team analytics. Built for developer teams.',
-    tags: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
+      'A video-conferencing platform that composites real-time AR annotations directly onto the live call stream. Engineers on the floor draw, point, and tag in 3D space while remote experts guide them — no instruction lag, no screenshots. Cloud-based chat built on Firebase; crash telemetry streamed through AWS CloudWatch.',
+    impact: 'Shipped to enterprise AR workflows with thousands of on-site field users.',
+    tags: ['Android SDK', 'Kotlin', 'Jetpack Compose', 'WebRTC', 'Firebase', 'AWS'],
     image:
-      'https://images.unsplash.com/photo-1549791084-5f78368b208b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85',
+      'https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=1200&q=80',
     live: '#',
     github: '#',
   },
   {
     id: 2,
-    title: 'ShopNest — E-Commerce Platform',
+    featured: true,
+    title: 'UNITEAR 3D Builder — HoloLens AR',
+    company: 'iBoson Innovations · 2022–2023',
     description:
-      'Full-featured e-commerce platform with product catalog, cart, payments via Stripe, and an admin dashboard for inventory management.',
-    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Stripe'],
+      'A cross-platform builder for shipping interactive 3D experiences straight into Microsoft HoloLens. I wrote the Android companion app, integrated AR functionality over the live video stream, and authored the data contracts that synchronise 3D scenes between desktop, mobile, and headset in real time.',
+    impact: 'Part of the iBoson AR suite that crossed 20,000+ client installs.',
+    tags: ['Unity 3D', 'C#', 'HoloLens', 'Android', 'MVVM', 'Clean Architecture'],
     image:
-      'https://images.unsplash.com/photo-1602128110234-2d11c0aaadfe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85',
+      'https://images.unsplash.com/photo-1617802690992-15d93263d3a9?auto=format&fit=crop&w=1200&q=80',
     live: '#',
     github: '#',
   },
   {
     id: 3,
-    title: 'WeatherMap — Climate Dashboard',
+    title: 'On-prem → AWS Migration + CI/CD',
+    company: 'iBoson Innovations · 2023',
     description:
-      'Interactive global weather dashboard with live data, 7-day forecasts, historical charts, and geolocation support.',
-    tags: ['React', 'Python', 'FastAPI', 'OpenWeather API'],
+      'Lifted a legacy on-prem backend onto AWS without a minute of user-facing downtime. Designed GitHub Actions pipelines for automated builds, tests, and deploys, then wired CloudWatch alarms into the team\'s chat so every anomaly surfaces before a user sees it.',
+    impact: 'Cut deploy cycle from days to minutes; eliminated manual rollout errors.',
+    tags: ['AWS', 'GitHub Actions', 'CI/CD', 'CloudWatch', 'Firebase'],
     image:
-      'https://images.unsplash.com/photo-1483366774565-c783b9f70e2c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85',
+      'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=1200&q=80',
     live: '#',
     github: '#',
   },
   {
     id: 4,
-    title: 'Scribe — AI Writing Assistant',
+    title: 'Real-Estate Listings — Mobile + API',
+    company: 'Global Retail Consulting · 2019–2020',
     description:
-      'An AI-powered writing tool that helps users draft, refine, and summarize documents with real-time suggestions and version history.',
-    tags: ['React', 'OpenAI API', 'Firebase', 'Tailwind CSS'],
+      'End-to-end ownership of a property-discovery Android app: RESTful integrations with live MLS data, a CI/CD pipeline that shipped nightly builds to the team, and a UX rework that lifted user engagement 20% in the first quarter post-launch.',
+    impact: '+20% user engagement · shipped on full CI/CD from day one.',
+    tags: ['Android', 'Java', 'REST APIs', 'MySQL', 'CI/CD'],
     image:
-      'https://images.unsplash.com/photo-1534094830444-3a1e21f7e3e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc3NjQ1ODQ5M3ww&ixlib=rb-4.1.0&q=85',
+      'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
     live: '#',
     github: '#',
   },
@@ -52,36 +62,35 @@ export default function Projects() {
     <section
       id="projects"
       data-testid="projects-section"
-      className="py-24 md:py-32 bg-bg-secondary border-b border-border"
+      className="py-24 md:py-32 border-b border-border"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Section label */}
         <p
           data-testid="projects-label"
           className="font-mono text-xs uppercase tracking-[0.2em] text-secondary mb-4"
         >
-          03 — Projects
+          03 — Selected Work
         </p>
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
           <h2
             data-testid="projects-heading"
-            className="font-heading font-medium text-3xl md:text-4xl tracking-tight text-primary"
+            className="font-heading font-medium text-3xl md:text-5xl tracking-tight text-primary leading-[1.05]"
           >
-            Selected Work
+            What I've shipped,<br />
+            <span className="text-accent">and the dent it made.</span>
           </h2>
           <a
-            href="https://github.com"
+            href="https://www.linkedin.com/in/sreejithsnair"
             target="_blank"
             rel="noopener noreferrer"
             data-testid="projects-github-link"
             className="font-mono text-xs uppercase tracking-widest text-secondary hover:text-primary flex items-center gap-2 transition-colors duration-300"
           >
             <Github size={14} />
-            View All on GitHub
+            See Full Experience
           </a>
         </div>
 
-        {/* Projects grid */}
         <div
           data-testid="projects-grid"
           className="grid grid-cols-1 md:grid-cols-2 gap-px border border-border bg-border"
@@ -90,61 +99,71 @@ export default function Projects() {
             <article
               key={project.id}
               data-testid={`project-card-${project.id}`}
-              className="bg-bg-primary group"
+              className={`bg-bg-primary group ${project.featured ? 'md:col-span-2' : ''}`}
             >
-              {/* Image */}
-              <div className="overflow-hidden h-52 md:h-60">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  data-testid={`project-image-${project.id}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-8">
-                <h3
-                  data-testid={`project-title-${project.id}`}
-                  className="font-heading font-medium text-xl md:text-2xl text-primary mb-3"
-                >
-                  {project.title}
-                </h3>
-                <p className="font-body text-sm md:text-base leading-relaxed text-secondary mb-5">
-                  {project.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      data-testid={`project-tag-${tag.toLowerCase().replace(/\s/g, '-')}`}
-                      className="font-mono text-xs px-3 py-1 border border-border text-secondary"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <div className={`grid ${project.featured ? 'md:grid-cols-[1.1fr_1fr]' : ''} gap-0`}>
+                {/* Image */}
+                <div className={`overflow-hidden ${project.featured ? 'h-64 md:h-full min-h-[320px]' : 'h-52 md:h-60'}`}>
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    data-testid={`project-image-${project.id}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
                 </div>
 
-                {/* Links */}
-                <div className="flex items-center gap-4">
-                  <a
-                    href={project.live}
-                    data-testid={`project-live-${project.id}`}
-                    className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-primary hover:text-accent transition-colors duration-300"
+                {/* Content */}
+                <div className="p-8 md:p-10 flex flex-col">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent mb-3">
+                    {project.company}
+                  </p>
+                  <h3
+                    data-testid={`project-title-${project.id}`}
+                    className="font-heading font-medium text-xl md:text-2xl text-primary mb-4 leading-tight"
                   >
-                    <ExternalLink size={13} />
-                    Live Demo
-                  </a>
-                  <a
-                    href={project.github}
-                    data-testid={`project-github-${project.id}`}
-                    className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-secondary hover:text-primary transition-colors duration-300"
+                    {project.title}
+                  </h3>
+                  <p className="font-body text-sm md:text-base leading-relaxed text-secondary mb-5">
+                    {project.description}
+                  </p>
+                  <p
+                    data-testid={`project-impact-${project.id}`}
+                    className="font-mono text-xs text-primary border-l-2 border-accent pl-3 mb-6"
                   >
-                    <Github size={13} />
-                    Source Code
-                  </a>
+                    {project.impact}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        data-testid={`project-tag-${project.id}-${tag.toLowerCase().replace(/[\s/]/g, '-')}`}
+                        className="font-mono text-xs px-3 py-1 border border-border text-secondary"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-6">
+                    <a
+                      href={project.live}
+                      data-testid={`project-live-${project.id}`}
+                      className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-primary hover:text-accent transition-colors duration-300"
+                    >
+                      <ExternalLink size={13} />
+                      Case Study
+                    </a>
+                    <a
+                      href={project.github}
+                      data-testid={`project-github-${project.id}`}
+                      className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-secondary hover:text-primary transition-colors duration-300"
+                    >
+                      <Github size={13} />
+                      Details
+                    </a>
+                  </div>
                 </div>
               </div>
             </article>
