@@ -1,4 +1,5 @@
 import HeroPortrait from './HeroPortrait'
+import { motion } from 'framer-motion'
 
 export default function Hero({ scrollYProgress }) {
   return (
@@ -10,7 +11,11 @@ export default function Hero({ scrollYProgress }) {
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full py-24 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-16 items-center">
           {/* ── Text block ───────────────────────────────────────────── */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
             <p
               data-testid="hero-label"
               className="font-mono text-xs uppercase tracking-[0.22em] text-secondary mb-6 flex items-center gap-3"
@@ -68,12 +73,17 @@ export default function Hero({ scrollYProgress }) {
                 Get In Touch
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* ── 3D Portrait ──────────────────────────────────────────── */}
-          <div className="flex justify-center md:justify-end">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
+            className="flex justify-center md:justify-end"
+          >
             <HeroPortrait scrollYProgress={scrollYProgress} />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

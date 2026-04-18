@@ -12,6 +12,15 @@ const JOURNEY = [
   { year: '2022', label: 'Senior Engineer @ iBoson — XRMeet + UNITEAR shipped' },
 ]
 
+import { motion } from 'framer-motion'
+
+const reveal = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-10% 0px' },
+  transition: { duration: 0.7, ease: 'easeOut' },
+}
+
 export default function About() {
   return (
     <section
@@ -19,7 +28,7 @@ export default function About() {
       data-testid="about-section"
       className="py-24 md:py-32 border-b border-border"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <motion.div className="max-w-7xl mx-auto px-6 md:px-12" {...reveal}>
         <p
           data-testid="about-label"
           className="font-mono text-xs uppercase tracking-[0.2em] text-secondary mb-4"
@@ -117,7 +126,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

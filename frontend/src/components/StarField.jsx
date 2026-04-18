@@ -123,7 +123,7 @@ export default function StarField({ scrollYProgress }) {
   // Wrapper opacity — single motion value, negligible cost.
   const opacity = useTransform(
     scrollYProgress,
-    [0,   0.70, 0.88, 1.0],
+    [0,   0.56, 0.70, 1.0],
     [0,   0,    1,    1]
   )
 

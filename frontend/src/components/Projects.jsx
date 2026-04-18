@@ -1,4 +1,12 @@
 import { ExternalLink, Github } from 'lucide-react'
+import { motion } from 'framer-motion'
+
+const reveal = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-10% 0px' },
+  transition: { duration: 0.7, ease: 'easeOut' },
+}
 
 const PROJECTS = [
   {
@@ -64,7 +72,7 @@ export default function Projects() {
       data-testid="projects-section"
       className="py-24 md:py-32 border-b border-border"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <motion.div className="max-w-7xl mx-auto px-6 md:px-12" {...reveal}>
         <p
           data-testid="projects-label"
           className="font-mono text-xs uppercase tracking-[0.2em] text-secondary mb-4"
@@ -169,7 +177,7 @@ export default function Projects() {
             </article>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

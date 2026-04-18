@@ -1,41 +1,31 @@
 /**
- * App.js — Portfolio root with background animation layer structure.
+ * App.js — Portfolio root with background animation layer + gamer alter-ego.
  *
  * LAYER ARCHITECTURE
  * ───────────────────
- * The page is composed of two stacked layers inside a shared root:
+ *   #page-root
+ *   ├── BackgroundLayer  (fixed, z-0)    sky + sun + moon + stars
+ *   └── content-layer    (relative, z-10)
+ *        ├── Navbar
+ *        ├── Hero        day phase
+ *        ├── About       day phase
+ *        ├── Skills      day → sunset
+ *        ├── Projects    sunset
+ *        ├── Contact     night onset
+ *        ├── GamerProfile NIGHT / cyberpunk alter ego
+ *        └── Footer
  *
- *   ┌─────────────────────────────────────────────┐
- *   │  #page-root  (position: relative)           │
- *   │                                             │
- *   │  ┌─────────────────────────────────────┐   │
- *   │  │  BackgroundLayer                    │   │
- *   │  │  position: fixed  |  z-index: 0     │   │
- *   │  │  inset: 0  (covers full viewport)   │   │
- *   │  │                                     │   │
- *   │  │  [sky gradient slots — empty now]   │   │
- *   │  └─────────────────────────────────────┘   │
- *   │                                             │
- *   │  ┌─────────────────────────────────────┐   │
- *   │  │  Content layer                      │   │
- *   │  │  position: relative  |  z-index: 10 │   │
- *   │  │  Scrolls normally on top of bg      │   │
- *   │  │                                     │   │
- *   │  │  Navbar  (sticky top-0  z-50)       │   │
- *   │  │  Hero → About → Skills →            │   │
- *   │  │  Projects → Contact → Footer        │   │
- *   │  └─────────────────────────────────────┘   │
- *   └─────────────────────────────────────────────┘
+ * SCROLL PHASES (adjusted for the longer page with GamerProfile)
+ * ────────────────────────────────────────────────────────────────
+ *   0.00 – 0.22  ☀  Day          (Hero + About)
+ *   0.22 – 0.44  🌇 Sunset        (Skills + Projects)
+ *   0.44 – 0.64  🌃 Night onset   (Contact)
+ *   0.64 – 1.00  🕹  Cyberpunk    (GamerProfile — fully dark, neon)
  *
- * SCROLL PROGRESS TRACKING
- * ─────────────────────────
- * useScroll() from Framer Motion tracks the window scroll position as a
- * MotionValue (0.0 at top → 1.0 at bottom). It updates every frame
- * without triggering re-renders, keeping animation hooks smooth.
- *
- * The scrollYProgress value is logged to the console for development
- * verification and will be passed to BackgroundLayer in a future phase
- * to drive the day-to-night sky gradient transition.
+ *   · data-theme flips to 'dark' at 0.46 (around start of projects)
+ *   · Sun exits right edge by ~0.46
+ *   · Moon enters from left at ~0.52, exits right by ~0.75
+ *   · Stars fade in 0.56 → 0.70 and stay visible through gamer section
  */
 
 import { useRef, useEffect } from 'react'
@@ -46,18 +36,21 @@ import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
+import GamerProfile from './components/GamerProfile'
 import Footer from './components/Footer'
 import BackgroundLayer from './components/BackgroundLayer'
 import '@/App.css'
 
+// Scroll threshold at which the page flips to dark theme. Tuned to
+// coincide with the sun starting its exit and night sky building.
+const DARK_THRESHOLD = 0.46
+
 export default function App() {
   const { scrollYProgress } = useScroll()
 
-  // Refs track dark-mode state without triggering re-renders
   const isDarkRef = useRef(false)
   const transitionTimeoutRef = useRef(null)
 
-  // Initialise to light theme and clean up on unmount
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'light')
     return () => {
@@ -66,16 +59,13 @@ export default function App() {
   }, [])
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    // Dark mode activates at ~62% scroll (entering projects section, night sky building).
-    // Only fire when the threshold is actually crossed to avoid redundant DOM writes.
-    const shouldBeDark = latest >= 0.62
+    const shouldBeDark = latest >= DARK_THRESHOLD
     if (shouldBeDark !== isDarkRef.current) {
       isDarkRef.current = shouldBeDark
       document.documentElement.setAttribute(
         'data-theme',
         shouldBeDark ? 'dark' : 'light'
       )
-      // Clear any pending timeout and reset after transition completes
       if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current)
       transitionTimeoutRef.current = setTimeout(() => {
         transitionTimeoutRef.current = null
@@ -84,29 +74,9 @@ export default function App() {
   })
 
   return (
-    /*
-     * Page root — establishes a new stacking context so all z-index
-     * values on BackgroundLayer (z-0) and the content layer (z-10)
-     * are predictable and self-contained.
-     */
     <div id="page-root" data-testid="page-root" className="relative">
-
-      {/* ── Layer 1: Background ───────────────────────────────────── */}
-      {/*
-       * Fixed to the viewport. Stays in place while the content above
-       * scrolls. Currently empty — sky gradient layers (dawn, day,
-       * dusk, night) will be added here in the animation phase.
-       */}
-      {/* scrollYProgress drives the day → sunset → night colour transition */}
       <BackgroundLayer scrollYProgress={scrollYProgress} />
 
-      {/* ── Layer 2: Content ──────────────────────────────────────── */}
-      {/*
-       * position: relative + z-10 ensures this layer renders on top of
-       * BackgroundLayer. It is NOT a scroll container itself — the page
-       * document handles scrolling, so the Navbar's sticky positioning
-       * continues to work correctly relative to the viewport.
-       */}
       <div id="content-layer" data-testid="content-layer" className="relative z-10">
         <Navbar />
         <main>
@@ -115,10 +85,10 @@ export default function App() {
           <Skills />
           <Projects />
           <Contact />
+          <GamerProfile />
         </main>
         <Footer />
       </div>
-
     </div>
   )
 }
