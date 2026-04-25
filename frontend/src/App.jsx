@@ -39,7 +39,7 @@ import Contact from './components/Contact'
 import GamerProfile from './components/GamerProfile'
 import Footer from './components/Footer'
 import BackgroundLayer from './components/BackgroundLayer'
-import '@/App.css'
+import './index.css'
 
 // Scroll threshold at which the page flips to dark theme. Tuned to
 // coincide with the sun starting its exit and night sky building.
